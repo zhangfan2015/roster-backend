@@ -3,6 +3,7 @@ package com.example.demo.modules.position.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.example.demo.modules.position.entity.Position;
 import com.example.demo.modules.position.mapper.PositionMapper;
 import com.example.demo.modules.position.service.PositionService;
 import org.springframework.stereotype.Service;

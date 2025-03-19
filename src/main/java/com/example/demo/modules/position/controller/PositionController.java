@@ -2,6 +2,7 @@ package com.example.demo.modules.position.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.demo.common.Result;
+import com.example.demo.modules.position.entity.Position;
 import com.example.demo.modules.position.service.PositionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

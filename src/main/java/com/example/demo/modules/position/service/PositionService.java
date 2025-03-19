@@ -2,6 +2,7 @@ package com.example.demo.modules.position.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.example.demo.modules.position.entity.Position;
 
 /**
 * @author Administrator
