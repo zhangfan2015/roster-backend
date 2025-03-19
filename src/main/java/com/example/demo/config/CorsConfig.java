@@ -14,7 +14,7 @@ public class CorsConfig {
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/api/**")
 //                        .allowedOrigins("http://localhost:8081") // Vue 项目的地址
-                        .allowedOrigins("http://192.168.2.11:8081") // Vue 项目的地址
+                        .allowedOrigins("http://192.168.2.11:8081","http://124.220.206.34::8081")// Vue 项目的地址
                         .allowedMethods("GET", "POST", "PUT", "DELETE")
                         .allowedHeaders("*")
                         .allowCredentials(true);

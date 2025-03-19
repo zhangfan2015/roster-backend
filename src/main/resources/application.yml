@@ -1,5 +1,5 @@
 spring:
   application:
-    name: demo11
+    name: roster
   profiles:
     active: prod
