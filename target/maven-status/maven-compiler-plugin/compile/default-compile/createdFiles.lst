@@ -1,3 +1,4 @@
+com\example\demo\modules\file\service\SysFileService.class
 com\example\demo\modules\user\controller\UserController.class
 com\example\demo\modules\user\vo\UserDepVo.class
 com\example\demo\config\MybatisPlusConfig.class
@@ -7,8 +8,10 @@ com\example\demo\modules\user\entity\UserRole.class
 com\example\demo\config\CorsConfig.class
 com\example\demo\modules\company\mapper\CompanyMapper.class
 com\example\demo\modules\role\service\RoleService.class
+com\example\demo\modules\file\controller\SysFileController.class
 com\example\demo\modules\role\service\impl\RoleServiceImpl.class
 com\example\demo\modules\position\mapper\PositionMapper.class
+com\example\demo\modules\message\controller\InitMessageController.class
 com\example\demo\modules\user\mapper\UserMapper.class
 com\example\demo\modules\menu\vo\MenuVo.class
 com\example\demo\modules\user\vo\LoginVO.class
@@ -23,6 +26,8 @@ com\example\demo\modules\depart\service\impl\DepartServiceImpl.class
 com\example\demo\common\constant\CommonConstant.class
 com\example\demo\modules\position\controller\PositionController.class
 com\example\demo\modules\depart\service\DepartService.class
+com\example\demo\modules\message\entity\InitMessage.class
+com\example\demo\modules\file\mapper\SysFileMapper.class
 com\example\demo\modules\role\controller\RoleController.class
 com\example\demo\modules\depart\mapper\DepartMapper.class
 com\example\demo\modules\user\mapper\UserRoleMapper.class
@@ -35,10 +40,16 @@ com\example\demo\modules\user\entity\User.class
 com\example\demo\config\CorsConfig$1.class
 com\example\demo\modules\menu\service\MenuService.class
 com\example\demo\common\Result.class
+com\example\demo\modules\file\entity\SysFile.class
 com\example\demo\modules\menu\service\impl\MenuServiceImpl.class
 com\example\demo\modules\menu\entity\Menu.class
 com\example\demo\modules\role\mapper\RoleMapper.class
 com\example\demo\modules\depart\controller\DepartController.class
 com\example\demo\modules\menu\controller\MenuController.class
+com\example\demo\modules\message\service\InitMessageService.class
 com\example\demo\modules\user\service\UserService.class
 com\example\demo\modules\company\service\CompanyService.class
+com\example\demo\modules\message\service\impl\InitMessageServiceImpl.class
+com\example\demo\modules\file\entity\FileDTO.class
+com\example\demo\modules\file\service\impl\SysFileServiceImpl.class
+com\example\demo\modules\message\mapper\InitMessageMapper.class

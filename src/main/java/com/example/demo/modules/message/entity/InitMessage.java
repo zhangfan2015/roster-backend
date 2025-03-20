@@ -27,17 +27,17 @@ public class InitMessage {
     /**
      * 消息类型
      */
-    private String message_type;
+    private String messageType;
 
     /**
      * 父id
      */
-    private String parent_id;
+    private String parentId;
 
     /**
      * 发送时间
      */
-    private LocalDateTime create_time;
+    private LocalDateTime createTime;
 
     /**
      * 消息状态(已读，未读)

@@ -1,5 +1,6 @@
 package com.example.demo.modules.message.service;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.demo.modules.message.entity.InitMessage;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -10,4 +11,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
 */
 public interface InitMessageService extends IService<InitMessage> {
 
+    Page<InitMessage> getMessages(InitMessage message, Integer pageNo, Integer pageSize);
 }

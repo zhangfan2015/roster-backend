@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.modules.file.mapper.SysFileMapper">
+
+    <resultMap id="BaseResultMap" type="com.example.demo.modules.file.entity.SysFile">
+            <id property="id" column="id" />
+            <result property="name" column="name" />
+            <result property="path" column="path" />
+            <result property="size" column="size" />
+            <result property="type" column="type" />
+            <result property="createTime" column="create_time" />
+            <result property="createBy" column="create_by" />
+            <result property="updateTime" column="update_time" />
+            <result property="updateBy" column="update_by" />
+            <result property="deleted" column="deleted" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,name,path,size,type,create_time,
+        create_by,update_time,update_by,deleted
+    </sql>
+</mapper>

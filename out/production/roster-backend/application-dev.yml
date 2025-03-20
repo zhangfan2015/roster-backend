@@ -39,3 +39,7 @@ logging:
     root: INFO
     com.example: DEBUG
 
+file:
+  upload:
+    path: D:/upload/files
+
