@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.example.demo.common.Result;
 import com.example.demo.modules.user.entity.User;
 import com.example.demo.modules.user.mapper.UserMapper;
 import com.example.demo.modules.user.service.UserService;
@@ -11,12 +12,11 @@ import com.example.demo.modules.user.vo.UserDepVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
+import org.springframework.util.ObjectUtils;
+import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -56,19 +56,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public IPage<User> getUserByRoleId(Page<User> page, String roleId, String username) {
-        IPage<User> userRoleList = userMapper.getUserByRoleId(page, roleId, username);
-        List<User> records = userRoleList.getRecords();
-        if (null != records && records.size() > 0) {
-            List<String> userIds = records.stream().map(User::getId).collect(Collectors.toList());
-            Map<String, String> useDepNames = this.getDepNamesByUserIds(userIds);
-            for (User sysUser : userRoleList.getRecords()) {
-                //设置部门
-                sysUser.setDepartmentName(useDepNames.get(sysUser.getId()));
-                //设置用户职位id
-//                this.userPositionId(sysUser);
-            }
-        }
-        return userRoleList;
+
+        IPage<User> list = userMapper.getUserByRoleId(page, roleId, username);
+        return list;
     }
 
     @Override
@@ -85,5 +75,44 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
                 }
         );
         return res;
+    }
+
+    @Override
+    public Page<User> getUserList(User user, Integer pageNo, Integer pageSize) {
+        Page<User> page = new Page<>(pageNo, pageSize);
+
+        // 构建查询条件
+        LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
+        // 添加条件
+        if (StringUtils.hasText(user.getUsername())) {
+            queryWrapper.like(User::getUsername, user.getUsername());
+        }
+        if (StringUtils.hasText(user.getRealname())) {
+            queryWrapper.like(User::getRealname, user.getRealname());
+        }
+        // 确保 del_flag = 0 条件一定会被添加
+        queryWrapper.eq(User::getDelFlag, 0);
+        // 执行查询
+        return this.page(page, queryWrapper);
+    }
+
+    @Override
+    public Result<?> changePassword(User u) {
+
+        u.setPassword(DigestUtils.md5DigestAsHex(u.getPassword().getBytes()));
+        userMapper.updateById(u);
+        return Result.ok("密码修改成功!");
+    }
+
+    @Override
+    public Page<User> getYxUserList(Integer pageNo, Integer pageSize) {
+        Page<User> page = new Page<>(pageNo, pageSize);
+
+        // 构建查询条件
+        LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(User::getDelFlag, 0);//delflag正常
+        queryWrapper.eq(User::getStatus, 1);//status正常
+        // 执行查询
+        return this.page(page, queryWrapper);
     }
 }

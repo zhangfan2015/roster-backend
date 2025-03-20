@@ -11,7 +11,7 @@ import com.example.demo.modules.position.entity.Position;
 */
 public interface PositionService extends IService<Position> {
 //
-    Page<Position> getPositionList(String positionName, Integer pageNo, Integer pageSize);
+    Page<Position> getPositionList(Position position, Integer pageNo, Integer pageSize);
 
 
 

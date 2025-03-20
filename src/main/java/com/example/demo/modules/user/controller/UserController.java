@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.demo.common.Result;
+import com.example.demo.modules.company.entity.Company;
 import com.example.demo.modules.role.entity.Role;
 import com.example.demo.modules.role.service.RoleService;
 import com.example.demo.modules.user.entity.User;
@@ -14,12 +15,14 @@ import com.example.demo.modules.user.service.UserService;
 import com.example.demo.common.util.JwtUtil;
 import com.example.demo.modules.user.vo.LoginVO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import io.jsonwebtoken.Claims;
 
@@ -136,20 +139,8 @@ public class UserController {
 		return Result.error("注册失败，用户名已存在!");
 	}
 
-	@RequestMapping(value = "/userRoleList", method = RequestMethod.GET)
-	public Result<IPage<User>> userRoleList(@RequestParam(name="pageNo", defaultValue="1") Integer pageNo,
-											   @RequestParam(name="pageSize", defaultValue="10") Integer pageSize, HttpServletRequest req) {
-		Result<IPage<User>> result = new Result<IPage<User>>();
-		Page<User> page = new Page<User>(pageNo, pageSize);
-		String roleId = req.getParameter("roleId");
-		String username = req.getParameter("username");
-		IPage<User> pageList = userService.getUserByRoleId(page,roleId,username);
-		result.setSuccess(true);
-		result.setResult(pageList);
-		return result;
-	}
 
-	@PostMapping("/addUsers")
+	@PostMapping("/add")
 	public Result<String> addUser(@RequestBody User user) {
 		// 获取当前日期和时间
 		user.setCreateTime(LocalDateTime.now());
@@ -157,13 +148,20 @@ public class UserController {
 		return Result.OK("添加成功！");
 	}
 
-	@GetMapping("/getList")
-	public List<User> getList(){
-		QueryWrapper<User> queryWrapper = new QueryWrapper<>();
-		List<User> users = userService.list(queryWrapper);
-		return users;
+	@GetMapping("/getUserList")
+	public Result<Page<User>> getUserList(User user,
+												@RequestParam(name="pageNo", defaultValue="1") Integer pageNo,
+												@RequestParam(name="pageSize", defaultValue="10") Integer pageSize) {
+		Page<User> page = userService.getUserList(user,pageNo,pageSize);
+		return Result.OK(page);
 	}
 
+	@GetMapping("/getYxUserList")
+	public Result<Page<User>> getYxUserList(@RequestParam(name="pageNo", defaultValue="1") Integer pageNo,
+										  @RequestParam(name="pageSize", defaultValue="10") Integer pageSize) {
+		Page<User> page = userService.getYxUserList(pageNo,pageSize);
+		return Result.OK(page);
+	}
 
 	@GetMapping("/getUserByName")
 	public Result<User> getUserByName(@RequestParam("username") String username){
@@ -180,9 +178,27 @@ public class UserController {
 		return Result.OK("编辑成功！");
 	}
 
+	/**
+	 * 修改用户密码
+	 * @param user
+	 * @return
+	 */
+	@PutMapping("/editPs")
+	public Result<?> editPs(@RequestBody User user) {
+		User u = userService.getOne(new LambdaQueryWrapper<User>().eq(User::getUsername, user.getUsername()));
+		if (u == null) {
+			return Result.error("用户不存在！");
+		}
+		user.setId(u.getId());
+		return userService.changePassword(user);
+	}
+
 	@DeleteMapping("/delete")
 	public Result<String> delete(@RequestParam(name="id",required=true) String id) {
-		userService.removeById(id);
+		User byId = userService.getById(id);
+		//删除状态(0-正常,1-已删除)
+		byId.setDelFlag(1);
+		userService.updateById(byId);
 		return Result.OK("删除成功!");
 	}
 
@@ -205,31 +221,7 @@ public class UserController {
 		return users;
 	}
 
-	@PostMapping("/addUserRole")
-	public Result<String> addUserRole(@RequestBody UserRole user) {
-		// 获取当前日期和时间
 
-		userRoleService.save(user);
-		return Result.OK("添加成功！");
-	}
-
-
-	@GetMapping("/getUserByRole")
-	public List<String> getUserByRole(@RequestParam(name="id",required=true) String id) {
-		LambdaQueryWrapper<UserRole> queryWrapper = new QueryWrapper<UserRole>().lambda();
-		queryWrapper.eq(UserRole::getUserId,id);
-		List<UserRole> users = userRoleService.list(queryWrapper);
-
-		List<String> list = new ArrayList<>();
-		users.forEach(user -> {
-			LambdaQueryWrapper<Role> queryWrapper2 = new QueryWrapper<Role>().lambda();
-			queryWrapper2.eq(Role::getId,user.getRoleId());
-			Role role = roleService.getOne(queryWrapper2);
-			list.add(role.getRoleName());
-		});
-
-		return list;
-	}
 
     @GetMapping("/currentUser")
     public Result<User> getCurrentUser(@RequestHeader("Authorization") String authorization) {
@@ -259,5 +251,106 @@ public class UserController {
             return Result.error("获取当前用户失败");
         }
     }
+
+	@PutMapping("/updateStatus")
+	public Result<String> updateStatus(@RequestBody User user) {
+		if (user.getStatus() ==0){
+			return Result.error("用户未验证邮箱！");
+		}
+		if (user.getStatus() == 1){
+			user.setStatus(2);
+		}else if (user.getStatus() == 2){
+			user.setStatus(1);
+		}
+		user.setUpdateTime(LocalDateTime.now());
+		userService.updateById(user);
+		return Result.OK("编辑成功！");
+	}
+
+
+	//用户角色-------------------------------------------------------------------------
+
+//	@GetMapping("/getUserList")
+//	public Result<Page<User>> getUserList(User user,
+//										  @RequestParam(name="pageNo", defaultValue="1") Integer pageNo,
+//										  @RequestParam(name="pageSize", defaultValue="10") Integer pageSize) {
+//		Page<User> page = userService.getUserList(user,pageNo,pageSize);
+//		return Result.OK(page);
+//	}
+
+	@PostMapping("/addRole")
+	public Result<String> addUserRole(@RequestBody UserRole role) {
+		// 获取当前日期和时间
+
+		userRoleService.save(role);
+		return Result.OK("添加成功！");
+	}
+
+//	@PutMapping("/editRole")
+//	public Result<String> editRole(@RequestBody UserRole role) {
+//		role.setUpdateTime(LocalDateTime.now());
+//		userRoleService.updateById(role);
+//		return Result.OK("编辑成功！");
+//	}
+
+	@GetMapping("/getUserByRole")
+	public Result<List<String>> getUserByRole(@RequestParam(name="id",required=true) String id) {
+		LambdaQueryWrapper<UserRole> queryWrapper = new QueryWrapper<UserRole>().lambda();
+		queryWrapper.eq(UserRole::getUserId,id);
+		List<UserRole> users = userRoleService.list(queryWrapper);
+
+		List<String> list = new ArrayList<>();
+		users.forEach(user -> {
+			LambdaQueryWrapper<Role> queryWrapper2 = new QueryWrapper<Role>().lambda();
+			queryWrapper2.eq(Role::getId,user.getRoleId());
+			Role role = roleService.getOne(queryWrapper2);
+			list.add(role.getRoleName());
+		});
+
+		return Result.OK(list);
+	}
+
+	@RequestMapping(value = "/userRoleList", method = RequestMethod.GET)
+	public Result<IPage<User>> userRoleList(@RequestParam(name="pageNo", defaultValue="1") Integer pageNo,
+											   @RequestParam(name="pageSize", defaultValue="10") Integer pageSize, HttpServletRequest req) {
+		Result<IPage<User>> result = new Result<IPage<User>>();
+		Page<User> page = new Page<User>(pageNo, pageSize);
+		String roleId = req.getParameter("roleId");
+		String username = req.getParameter("username");
+		IPage<User> pageList = userService.getUserByRoleId(page,roleId,username);
+		result.setSuccess(true);
+		result.setResult(pageList);
+		return result;
+	}
+
+
+	@PostMapping("/bindUsers")
+	public Result<?> bindUsers(@RequestBody Map<String, Object> params) {
+		List<String> userIds = (List<String>) params.get("list");
+		String roleId = (String) params.get("roleId");
+		userIds.forEach(item -> {
+			UserRole role = new UserRole();
+			role.setRoleId(roleId);
+			role.setUserId(item);
+			userRoleService.save(role);
+		});
+
+		return Result.ok("添加成功");
+	}
+
+	@PostMapping("/unbindUser")
+	public Result<?> unbindUser(@RequestBody Map<String, Object> params) {
+		String roleId = (String) params.get("roleId");
+		String userId = (String) params.get("userId");
+		if (StringUtils.isEmpty(roleId) || StringUtils.isEmpty(userId)){
+			return Result.error("移除失败！");
+		}
+		LambdaQueryWrapper<UserRole> queryWrapper = new QueryWrapper<UserRole>().lambda();
+		queryWrapper.eq(UserRole::getRoleId,roleId);
+		queryWrapper.eq(UserRole::getUserId,userId);
+		userRoleService.remove(queryWrapper);
+		return Result.ok("移除成功");
+	}
+
 
 }

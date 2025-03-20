@@ -6,6 +6,9 @@ import com.example.demo.modules.depart.mapper.DepartMapper;
 import com.example.demo.modules.depart.service.DepartService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Map;
+
 /**
 * @author Administrator
 * @description 针对表【depart】的数据库操作Service实现
@@ -13,7 +16,6 @@ import org.springframework.stereotype.Service;
 */
 @Service
 public class DepartServiceImpl extends ServiceImpl<DepartMapper, Depart> implements DepartService {
-
 
 
 }

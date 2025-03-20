@@ -7,6 +7,7 @@ import com.example.demo.modules.position.entity.Position;
 import com.example.demo.modules.position.mapper.PositionMapper;
 import com.example.demo.modules.position.service.PositionService;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 /**
 * @author Administrator
@@ -17,15 +18,15 @@ import org.springframework.stereotype.Service;
 public class PositionServiceImpl extends ServiceImpl<PositionMapper, Position> implements PositionService {
 
     @Override
-    public Page<Position> getPositionList(String positionName, Integer pageNo, Integer pageSize) {
+    public Page<Position> getPositionList(Position position, Integer pageNo, Integer pageSize) {
         Page<Position> page = new Page<>(pageNo,pageSize);
 
         // 构建查询条件
         LambdaQueryWrapper<Position> queryWrapper = new LambdaQueryWrapper<>();
 
-        if (positionName!=null){
+        if (StringUtils.hasText(position.getPositionName())) {
             // 添加查询条件
-            queryWrapper.like( Position::getPositionName, positionName);
+            queryWrapper.like( Position::getPositionName, position.getPositionName());
         }
 
         // 执行查询

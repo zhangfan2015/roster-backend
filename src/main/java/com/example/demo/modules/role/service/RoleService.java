@@ -1,5 +1,6 @@
 package com.example.demo.modules.role.service;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.demo.modules.role.entity.Role;
 
@@ -10,4 +11,5 @@ import com.example.demo.modules.role.entity.Role;
 */
 public interface RoleService extends IService<Role> {
 
+    Page<Role> getRoleList(Role role, Integer pageNo, Integer pageSize);
 }

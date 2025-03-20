@@ -22,10 +22,10 @@ public class PositionController {
         return Result.OK("添加成功！");
     }
     @GetMapping("/getPositionList")
-    public Result<Page<Position>> getPositionList(String positionName,
+    public Result<Page<Position>> getPositionList(Position position,
                                                   @RequestParam(name="pageNo", defaultValue="1") Integer pageNo,
                                                   @RequestParam(name="pageSize", defaultValue="10") Integer pageSize) {
-        Page<Position> page = positionService.getPositionList(positionName,pageNo,pageSize);
+        Page<Position> page = positionService.getPositionList(position,pageNo,pageSize);
         return Result.OK(page);
     }
 

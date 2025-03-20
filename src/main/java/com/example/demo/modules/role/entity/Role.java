@@ -36,4 +36,8 @@ public class Role {
      * 删除状态（0，正常，1已删除）
      */
     private Integer delFlag;
+    /**
+     * 状态(0：正常  1：冻结 ）
+     */
+    private Integer status;
 }

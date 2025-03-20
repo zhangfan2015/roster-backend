@@ -3,6 +3,7 @@ package com.example.demo.modules.user.service;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.example.demo.common.Result;
 import com.example.demo.modules.user.entity.User;
 
 import java.util.List;
@@ -28,4 +29,10 @@ public interface UserService extends IService<User> {
      * @return
      */
     public Map<String,String> getDepNamesByUserIds(List<String> userIds);
+
+    Page<User> getUserList(User user, Integer pageNo, Integer pageSize);
+
+    Result<?> changePassword(User u);
+
+    Page<User> getYxUserList(Integer pageNo, Integer pageSize);
 }
