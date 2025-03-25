@@ -7,6 +7,7 @@ com\example\demo\modules\company\entity\Company.class
 com\example\demo\modules\user\entity\UserRole.class
 com\example\demo\config\CorsConfig.class
 com\example\demo\modules\company\mapper\CompanyMapper.class
+com\example\demo\modules\role\service\impl\RoleMenuServiceImpl.class
 com\example\demo\modules\role\service\RoleService.class
 com\example\demo\modules\file\controller\SysFileController.class
 com\example\demo\modules\role\service\impl\RoleServiceImpl.class
@@ -20,11 +21,13 @@ com\example\demo\modules\role\entity\Role.class
 com\example\demo\modules\company\controller\CompanyController.class
 com\example\demo\modules\depart\entity\Depart.class
 com\example\demo\Demo1Application.class
+com\example\demo\modules\role\entity\RoleMenuVo.class
 com\example\demo\modules\company\service\impl\CompanyServiceImpl.class
 com\example\demo\modules\menu\mapper\MenuMapper.class
 com\example\demo\modules\depart\service\impl\DepartServiceImpl.class
 com\example\demo\common\constant\CommonConstant.class
 com\example\demo\modules\position\controller\PositionController.class
+com\example\demo\modules\role\service\RoleMenuService.class
 com\example\demo\modules\depart\service\DepartService.class
 com\example\demo\modules\message\entity\InitMessage.class
 com\example\demo\modules\file\mapper\SysFileMapper.class
@@ -33,10 +36,12 @@ com\example\demo\modules\depart\mapper\DepartMapper.class
 com\example\demo\modules\user\mapper\UserRoleMapper.class
 com\example\demo\modules\user\service\impl\UserRoleServiceImpl.class
 com\example\demo\modules\position\entity\Position.class
+com\example\demo\modules\role\mapper\RoleMenuMapper.class
 com\example\demo\modules\user\service\UserRoleService.class
 com\example\demo\modules\position\service\PositionService.class
 com\example\demo\modules\user\service\impl\UserServiceImpl.class
 com\example\demo\modules\user\entity\User.class
+com\example\demo\modules\role\entity\RoleMenu.class
 com\example\demo\config\CorsConfig$1.class
 com\example\demo\modules\menu\service\MenuService.class
 com\example\demo\common\Result.class

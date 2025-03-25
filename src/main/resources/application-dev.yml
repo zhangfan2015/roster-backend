@@ -18,6 +18,11 @@ spring:
 #      max-lifetime: 1800000
 #      connection-timeout: 30000
 #      connection-test-query: SELECT 1gg
+  mvc:
+    static-path-pattern: /uploads/**
+  web:
+    resources:
+      static-locations: file:${file.upload.path}
 
 # MyBatis-Plus配置
 mybatis-plus:

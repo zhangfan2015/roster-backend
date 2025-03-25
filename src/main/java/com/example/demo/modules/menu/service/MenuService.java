@@ -15,4 +15,5 @@ public interface MenuService extends IService<Menu> {
 
     List<MenuVo> getMenuTree();
 
+    List<MenuVo> getCurrentUserMenus();
 }

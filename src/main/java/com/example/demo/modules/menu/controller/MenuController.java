@@ -38,6 +38,12 @@ public class MenuController {
         return Result.OK("添加成功！");
     }
 
+    @GetMapping("/getCurrentUserMenus")
+    public Result getCurrentUserMenus() {
+        List<MenuVo> menus = menuService.getCurrentUserMenus();
+        return Result.success(menus);
+    }
+
     @GetMapping("/getMenuList")
     public Result<List<Menu>> getMenuList(@RequestParam(name="menuName",required=false)String menuName){
         LambdaQueryWrapper<Menu> queryWrapper = new LambdaQueryWrapper<>();

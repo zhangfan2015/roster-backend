@@ -16,8 +16,10 @@ D:\workSpace\roster-backend\src\main\java\com\example\demo\config\CorsConfig.jav
 D:\workSpace\roster-backend\src\main\java\com\example\demo\modules\user\entity\User.java
 D:\workSpace\roster-backend\src\main\java\com\example\demo\modules\file\service\SysFileService.java
 D:\workSpace\roster-backend\src\main\java\com\example\demo\modules\user\mapper\UserMapper.java
+D:\workSpace\roster-backend\src\main\java\com\example\demo\modules\role\mapper\RoleMenuMapper.java
 D:\workSpace\roster-backend\src\main\java\com\example\demo\modules\role\service\impl\RoleServiceImpl.java
 D:\workSpace\roster-backend\src\main\java\com\example\demo\modules\menu\service\impl\MenuServiceImpl.java
+D:\workSpace\roster-backend\src\main\java\com\example\demo\modules\role\entity\RoleMenu.java
 D:\workSpace\roster-backend\src\main\java\com\example\demo\modules\file\entity\FileDTO.java
 D:\workSpace\roster-backend\src\main\java\com\example\demo\modules\file\service\impl\SysFileServiceImpl.java
 D:\workSpace\roster-backend\src\main\java\com\example\demo\modules\user\controller\UserController.java
@@ -25,6 +27,7 @@ D:\workSpace\roster-backend\src\main\java\com\example\demo\common\Result.java
 D:\workSpace\roster-backend\src\main\java\com\example\demo\modules\user\service\impl\UserRoleServiceImpl.java
 D:\workSpace\roster-backend\src\main\java\com\example\demo\modules\user\service\impl\UserServiceImpl.java
 D:\workSpace\roster-backend\src\main\java\com\example\demo\modules\position\entity\Position.java
+D:\workSpace\roster-backend\src\main\java\com\example\demo\modules\role\entity\RoleMenuVo.java
 D:\workSpace\roster-backend\src\main\java\com\example\demo\modules\role\entity\Role.java
 D:\workSpace\roster-backend\src\main\java\com\example\demo\modules\user\vo\UserDepVo.java
 D:\workSpace\roster-backend\src\main\java\com\example\demo\modules\file\entity\SysFile.java
@@ -33,9 +36,11 @@ D:\workSpace\roster-backend\src\main\java\com\example\demo\modules\depart\servic
 D:\workSpace\roster-backend\src\main\java\com\example\demo\modules\company\controller\CompanyController.java
 D:\workSpace\roster-backend\src\main\java\com\example\demo\modules\position\service\PositionService.java
 D:\workSpace\roster-backend\src\main\java\com\example\demo\modules\company\service\impl\CompanyServiceImpl.java
+D:\workSpace\roster-backend\src\main\java\com\example\demo\modules\role\service\impl\RoleMenuServiceImpl.java
 D:\workSpace\roster-backend\src\main\java\com\example\demo\modules\menu\vo\MenuVo.java
 D:\workSpace\roster-backend\src\main\java\com\example\demo\modules\menu\service\MenuService.java
 D:\workSpace\roster-backend\src\main\java\com\example\demo\modules\company\service\CompanyService.java
+D:\workSpace\roster-backend\src\main\java\com\example\demo\modules\role\service\RoleMenuService.java
 D:\workSpace\roster-backend\src\main\java\com\example\demo\modules\file\mapper\SysFileMapper.java
 D:\workSpace\roster-backend\src\main\java\com\example\demo\modules\role\mapper\RoleMapper.java
 D:\workSpace\roster-backend\src\main\java\com\example\demo\modules\message\entity\InitMessage.java

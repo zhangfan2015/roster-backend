@@ -13,7 +13,7 @@ import java.util.Map;
  */
 public interface UserService extends IService<User> {
     User login(String username, String password);
-    boolean register(User user);
+    boolean register(User user) throws Exception;
     /**
      * 根据角色Id查询
      * @param page
@@ -35,4 +35,6 @@ public interface UserService extends IService<User> {
     Result<?> changePassword(User u);
 
     Page<User> getYxUserList(Integer pageNo, Integer pageSize);
+
+    List<String> getUserRoleIds(String userId);
 }

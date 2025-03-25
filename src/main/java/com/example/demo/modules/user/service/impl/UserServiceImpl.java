@@ -5,8 +5,11 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.demo.common.Result;
+import com.example.demo.config.AESEncryption;
 import com.example.demo.modules.user.entity.User;
+import com.example.demo.modules.user.entity.UserRole;
 import com.example.demo.modules.user.mapper.UserMapper;
+import com.example.demo.modules.user.mapper.UserRoleMapper;
 import com.example.demo.modules.user.service.UserService;
 import com.example.demo.modules.user.vo.UserDepVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +29,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private UserRoleMapper userRoleMapper;
 
     @Override
     public User login(String username, String password) {
@@ -36,7 +41,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
-    public boolean register(User user) {
+    public boolean register(User user) throws Exception {
         // 检查用户名是否已存在
         LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(User::getUsername, user.getFullName());
@@ -49,7 +54,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 //        user.setUpdateTime(LocalDateTime.now());
         user.setEmail(user.getEmail());
         // 密码加密
-        user.setPassword(DigestUtils.md5DigestAsHex(user.getPassword().getBytes()));
+
+
+        String secretKey = AESEncryption.generateKey();
+        String encrypted = AESEncryption.encrypt(user.getPassword(), secretKey);
+
+
+        user.setPassword(encrypted);
         user.setUsername(user.getFullName());
         return save(user);
     }
@@ -114,5 +125,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         queryWrapper.eq(User::getStatus, 1);//status正常
         // 执行查询
         return this.page(page, queryWrapper);
+    }
+
+    @Override
+    public List<String> getUserRoleIds(String userId) {
+        LambdaQueryWrapper<UserRole> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(UserRole::getUserId, userId);
+        List<UserRole> userRoles = userRoleMapper.selectList(wrapper);
+        return userRoles.stream().map(UserRole::getRoleId).collect(Collectors.toList());
     }
 }

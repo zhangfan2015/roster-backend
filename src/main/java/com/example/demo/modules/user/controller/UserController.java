@@ -14,17 +14,27 @@ import com.example.demo.modules.user.service.UserRoleService;
 import com.example.demo.modules.user.service.UserService;
 import com.example.demo.common.util.JwtUtil;
 import com.example.demo.modules.user.vo.LoginVO;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.io.Encoders;
+import io.jsonwebtoken.security.Keys;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.File;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import io.jsonwebtoken.Claims;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
 
@@ -35,6 +45,8 @@ import io.jsonwebtoken.Claims;
 @CrossOrigin
 public class UserController {
 
+	private static final Logger log = LoggerFactory.getLogger(UserController.class);
+
 	@Autowired
 	private UserService userService;
     @Autowired
@@ -43,6 +55,8 @@ public class UserController {
 	private RoleService roleService;
 	@Autowired
 	private JwtUtil jwtUtil;
+	@Value("${file.upload.path}")
+	private String uploadPath;
 
 	/**
 	 *
@@ -132,7 +146,7 @@ public class UserController {
 	}
 
 	@PostMapping("/register")
-	public Result<Boolean> register(@RequestBody User user) {
+	public Result<Boolean> register(@RequestBody User user) throws Exception {
 		if (userService.register(user)) {
 			return Result.OK(true);
 		}
@@ -156,6 +170,11 @@ public class UserController {
 		return Result.OK(page);
 	}
 
+	@GetMapping("/getAllUser")
+	public Result<?> getAllUser() {
+		return Result.OK(userService.list());
+	}
+
 	@GetMapping("/getYxUserList")
 	public Result<Page<User>> getYxUserList(@RequestParam(name="pageNo", defaultValue="1") Integer pageNo,
 										  @RequestParam(name="pageSize", defaultValue="10") Integer pageSize) {
@@ -173,6 +192,21 @@ public class UserController {
 
 	@PutMapping("/edit")
 	public Result<String> updateUser(@RequestBody User user) {
+
+		if (user.getRoleId()!=null){
+			LambdaQueryWrapper<UserRole> queryWrapper = new LambdaQueryWrapper<>();
+			queryWrapper.eq(UserRole::getUserId,user.getId());
+			queryWrapper.eq(UserRole::getRoleId,user.getRoleId());
+			userRoleService.remove(queryWrapper);
+			//
+			UserRole userRole = new UserRole();
+			userRole.setUserId(user.getId());
+			userRole.setRoleId(user.getRoleId());
+			userRoleService.save(userRole);
+			//
+			Role byId = roleService.getById(user.getRoleId());
+			user.setRoleName(byId.getRoleName());
+		}
 		user.setUpdateTime(LocalDateTime.now());
 		userService.updateById(user);
 		return Result.OK("编辑成功！");
@@ -350,6 +384,53 @@ public class UserController {
 		queryWrapper.eq(UserRole::getUserId,userId);
 		userRoleService.remove(queryWrapper);
 		return Result.ok("移除成功");
+	}
+
+	@PostMapping("/uploadAvatar")
+	public Result<String> uploadAvatar(@RequestParam("file") MultipartFile file, @RequestParam("id") Long id) {
+		try {
+			// 检查文件是否为空
+			if (file.isEmpty()) {
+				return Result.error("请选择要上传的文件");
+			}
+
+			// 获取文件名
+			String fileName = file.getOriginalFilename();
+			// 获取文件后缀
+			String suffix = fileName.substring(fileName.lastIndexOf("."));
+			// 生成新的文件名
+			String newFileName = UUID.randomUUID().toString() + suffix;
+
+			// 检查上传目录是否存在，不存在则创建
+			File uploadDir = new File(uploadPath);
+			if (!uploadDir.exists()) {
+				uploadDir.mkdirs();
+			}
+
+			// 构建文件保存路径
+			String filePath = uploadPath + File.separator + newFileName;
+			File dest = new File(filePath);
+
+			// 保存文件
+			file.transferTo(dest);
+
+			// 更新用户头像信息到数据库
+			User user = userService.getById(id);
+			if (user != null) {
+				// 保存相对路径到数据库
+				String avatarUrl = "/uploads/" + newFileName;  // 这里的路径要根据你的静态资源访问配置来定
+				user.setImg(avatarUrl);
+				userService.updateById(user);
+
+				return Result.OK(avatarUrl);
+			} else {
+				return Result.error("用户不存在");
+			}
+
+		} catch (IOException e) {
+			log.error("文件上传失败", e);
+			return Result.error("文件上传失败：" + e.getMessage());
+		}
 	}
 
 

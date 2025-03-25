@@ -59,4 +59,10 @@ public class CompanyController {
         return Result.OK("编辑成功！");
     }
 
+    @GetMapping("/getStatus")
+    public Result<?> getStatus() {
+        companyService.getStatus();
+        return Result.OK("");
+    }
+
 }

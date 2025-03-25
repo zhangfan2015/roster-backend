@@ -4,6 +4,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
@@ -12,8 +13,9 @@ import java.util.Date;
 @Component
 public class JwtUtil {
     // 密钥
-    private static final SecretKey SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256);
-    
+    private static final String SECRET_KEY_STRING = "3GOJK/1JIh1pVBebXz6xD0NACaG2A9V4I5wwS5cjxkk="; // 替换为您的固定密钥
+    private static final SecretKey SECRET_KEY = Keys.hmacShaKeyFor(SECRET_KEY_STRING.getBytes());
+
     // 访问token有效期（毫秒）
     private static final long ACCESS_TOKEN_EXPIRE_TIME = 2 * 60 * 60 * 1000; // 2小时
     
@@ -89,4 +91,6 @@ public class JwtUtil {
             return true;
         }
     }
+
+
 } 

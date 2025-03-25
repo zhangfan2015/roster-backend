@@ -98,4 +98,23 @@ public class DepartController {
         return departs;
     }
 
+    @GetMapping("/getName")
+    public Result<?> getName(){
+        List<Map<String,String>> list = new ArrayList<>();
+
+        LambdaQueryWrapper<Depart> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(Depart::getDelFlag,0);
+        queryWrapper.eq(Depart::getStatus,0);
+        List<Depart> departs = departService.list(queryWrapper);
+        if (!departs.isEmpty()){
+            for (Depart depart : departs) {
+                Map<String,String> map = new HashMap<>();
+                map.put("id",depart.getId());
+                map.put("name",depart.getDepartName());
+                list.add(map);
+            }
+        }
+        return Result.OK(list);
+    }
+
 }

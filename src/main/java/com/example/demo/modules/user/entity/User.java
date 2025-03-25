@@ -67,4 +67,9 @@ public class User {
     private String fullName;
 
     private String img;
+    /**
+     *  角色id
+     */
+    private String roleId;
+    private String roleName;
 }

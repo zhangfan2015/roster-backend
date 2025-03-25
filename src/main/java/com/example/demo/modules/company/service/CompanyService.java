@@ -13,4 +13,5 @@ public interface CompanyService extends IService<Company> {
 
     Page<Company> getCompanyList(String companyName,Integer pageNo,Integer pageSize);
 
+    void getStatus();
 }

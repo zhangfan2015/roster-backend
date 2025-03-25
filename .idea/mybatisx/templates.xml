@@ -6,7 +6,7 @@
         <option name="generateConfig">
           <GenerateConfig>
             <option name="annotationType" value="NONE" />
-            <option name="basePackage" value="file" />
+            <option name="basePackage" value="role" />
             <option name="basePath" value="src/main/java" />
             <option name="classNameStrategy" value="camel" />
             <option name="encoding" value="UTF-8" />
@@ -69,8 +69,8 @@
             <option name="tableUIInfoList">
               <list>
                 <TableUIInfo>
-                  <option name="className" value="SysFile" />
-                  <option name="tableName" value="sys_file" />
+                  <option name="className" value="RoleMenu" />
+                  <option name="tableName" value="role_menu" />
                 </TableUIInfo>
               </list>
             </option>
